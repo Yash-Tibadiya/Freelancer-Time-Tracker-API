@@ -23,7 +23,7 @@ const projectSchema = new Schema<IProject>(
     },
     status: {
       type: String,
-      enum: ["active", "completed", "archived"],
+      enum: ["active", "completed", "archived"], // 👈 Enforce enum in Mongoose
       required: true,
       default: "active",
     },
