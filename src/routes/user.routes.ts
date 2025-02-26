@@ -17,14 +17,14 @@ const router = Router();
 // Public routes (no authentication required)
 router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
-router.route("/refresh-token").post(refreshAccessToken);
 
 // Protected routes (authentication required)
+router.route("/refresh-token").post(refreshAccessToken);
 router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/change-password").post(verifyJWT, changeCurrentPassword);
 router.route("/current-user").get(verifyJWT, getCurrentUser);
 router.route("/update-account").patch(verifyJWT, updateAccountDetails);
 router.route("/delete-account").delete(verifyJWT, deleteUserAccount);
-router.route("/get-user-all-projects").get(verifyJWT, getUserAllProjects);
+router.route("/get-user-projects").get(verifyJWT, getUserAllProjects);
 
 export default router;

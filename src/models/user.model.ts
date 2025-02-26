@@ -56,16 +56,19 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-userSchema.pre<IUser>("save", async function (next: (err?: CallbackError) => void) {
-  if (!this.isModified("password")) return next();
+userSchema.pre<IUser>(
+  "save",
+  async function (next: (err?: CallbackError) => void) {
+    if (!this.isModified("password")) return next();
 
-  try {
-    this.password = await bcrypt.hash(this.password, 12);
-    next();
-  } catch (error) {
-    next(error as CallbackError);
+    try {
+      this.password = await bcrypt.hash(this.password, 12);
+      next();
+    } catch (error) {
+      next(error as CallbackError);
+    }
   }
-});
+);
 
 userSchema.methods.isPasswordCorrect = async function (
   password: string
@@ -74,11 +77,6 @@ userSchema.methods.isPasswordCorrect = async function (
 };
 
 userSchema.methods.generateAccessToken = function (): string {
-  const secret: Secret = process.env.ACCESS_TOKEN_SECRET || '';
-  const expiresIn: number | undefined = process.env.ACCESS_TOKEN_EXPIRY ? parseInt(process.env.ACCESS_TOKEN_EXPIRY) : undefined;
-  const options: SignOptions = {
-    expiresIn,
-  };
   return jwt.sign(
     {
       _id: this._id,
@@ -86,23 +84,22 @@ userSchema.methods.generateAccessToken = function (): string {
       username: this.username,
       fullName: this.fullName,
     },
-    secret,
-    options
+    process.env.ACCESS_TOKEN_SECRET as string,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY as string,
+    }
   );
 };
 
 userSchema.methods.generateRefreshToken = function (): string {
-  const secret: Secret = process.env.REFRESH_TOKEN_SECRET || '';
-  const expiresIn: number | undefined = process.env.REFRESH_TOKEN_EXPIRY ? parseInt(process.env.REFRESH_TOKEN_EXPIRY) : undefined;
-  const options: SignOptions = {
-    expiresIn,
-  };
   return jwt.sign(
     {
       _id: this._id,
     },
-    secret,
-    options
+    process.env.REFRESH_TOKEN_SECRET as string,
+    {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY as string,
+    }
   );
 };
 
