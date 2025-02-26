@@ -7,6 +7,7 @@ import {
   getAllUserProjects,
 } from "../controllers/project.controller.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
+import taskRoutes from "./task.routes.js";
 
 const router = Router();
 
@@ -16,5 +17,8 @@ router.route("/").get(verifyJWT, getAllUserProjects); // Get all projects of the
 router.route("/:projectId").patch(verifyJWT, updateProject); // Update a project
 router.route("/:projectId").delete(verifyJWT, deleteProject); // Delete a project
 router.route("/:projectId/status").patch(verifyJWT, changeProjectStatus); // Change project status
+
+// ✅ Attach task routes under projects
+router.use("/:projectId/tasks", taskRoutes);
 
 export default router;
