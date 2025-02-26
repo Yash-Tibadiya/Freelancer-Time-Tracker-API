@@ -12,6 +12,8 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
+      issues: write
+      checks: write
     steps:
       - name: 🤖 Dependabot PR Auto-Merge
         uses: pascalgn/automerge-action@v0.15.6
