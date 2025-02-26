@@ -1,5 +1,5 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
-import jwt from "jsonwebtoken";
+import mongoose, { Schema, Document, Model, CallbackError } from "mongoose";
+import jwt, { Secret, SignOptions } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 export interface IUser extends Document {
@@ -56,11 +56,15 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-userSchema.pre<IUser>("save", async function (next) {
+userSchema.pre<IUser>("save", async function (next: (err?: CallbackError) => void) {
   if (!this.isModified("password")) return next();
 
-  this.password = await bcrypt.hash(this.password, 12);
-  next();
+  try {
+    this.password = await bcrypt.hash(this.password, 12);
+    next();
+  } catch (error) {
+    next(error as CallbackError);
+  }
 });
 
 userSchema.methods.isPasswordCorrect = async function (
@@ -70,6 +74,11 @@ userSchema.methods.isPasswordCorrect = async function (
 };
 
 userSchema.methods.generateAccessToken = function (): string {
+  const secret: Secret = process.env.ACCESS_TOKEN_SECRET || '';
+  const expiresIn: number | undefined = process.env.ACCESS_TOKEN_EXPIRY ? parseInt(process.env.ACCESS_TOKEN_EXPIRY) : undefined;
+  const options: SignOptions = {
+    expiresIn,
+  };
   return jwt.sign(
     {
       _id: this._id,
@@ -77,22 +86,23 @@ userSchema.methods.generateAccessToken = function (): string {
       username: this.username,
       fullName: this.fullName,
     },
-    process.env.ACCESS_TOKEN_SECRET as string,
-    {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY as string,
-    }
+    secret,
+    options
   );
 };
 
 userSchema.methods.generateRefreshToken = function (): string {
+  const secret: Secret = process.env.REFRESH_TOKEN_SECRET || '';
+  const expiresIn: number | undefined = process.env.REFRESH_TOKEN_EXPIRY ? parseInt(process.env.REFRESH_TOKEN_EXPIRY) : undefined;
+  const options: SignOptions = {
+    expiresIn,
+  };
   return jwt.sign(
     {
       _id: this._id,
     },
-    process.env.REFRESH_TOKEN_SECRET as string,
-    {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY as string,
-    }
+    secret,
+    options
   );
 };
 
