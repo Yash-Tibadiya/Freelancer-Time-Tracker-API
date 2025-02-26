@@ -242,6 +242,7 @@ const getUserAllProjects = asyncHandler(
 
     const user = await User.findById(userId).populate({
       path: "Projects",
+      populate: { path: "tasks" }, // ✅ Ensures tasks are fully populated
       select: "-users", // Exclude the users array to avoid large responses
     });
 
