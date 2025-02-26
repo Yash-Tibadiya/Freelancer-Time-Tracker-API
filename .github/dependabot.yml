@@ -17,6 +17,4 @@ updates:
       - "Yash-Tibadiya"
     commit-message:
       prefix: "chore(deps):"
-    ignore:
-      - dependency-type: "development"
     merge-strategy: "auto"
