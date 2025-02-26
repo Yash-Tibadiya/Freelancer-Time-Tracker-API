@@ -206,7 +206,8 @@ const getAllUserProjects = asyncHandler(
       throw new ApiError(404, "User not found");
     }
 
-    const projects = await Project.find({ users: user._id });
+    // Fetch projects and populate the "tasks" field
+    const projects = await Project.find({ users: user._id }).populate("tasks");
 
     return res
       .status(200)

@@ -29,7 +29,6 @@ const createTask = asyncHandler(async (req: CustomRequest, res: Response) => {
     throw new ApiError(404, "Project not found");
   }
 
-
   // Validate assigned user existence
   const assignedUser = await User.findById(assignedTo);
   if (!assignedUser) {
@@ -47,6 +46,7 @@ const createTask = asyncHandler(async (req: CustomRequest, res: Response) => {
     );
   }
 
+  // Create the task
   const task = await Task.create({
     name,
     description,
@@ -55,6 +55,13 @@ const createTask = asyncHandler(async (req: CustomRequest, res: Response) => {
     startTime,
     endTime,
   });
+
+  // Add the task to the project's tasks array
+  await Project.findByIdAndUpdate(
+    projectId,
+    { $push: { tasks: task._id } },
+    { new: true }
+  );
 
   return res
     .status(201)
