@@ -20,10 +20,12 @@ app.use(cookiparser());
 import userRoutes from "./routes/user.routes.js";
 import projectRoutes from "./routes/project.routes.js"
 import taskRoutes from "./routes/task.routes.js"
+import projectSummaryRoutes from "./routes/projectSummary.routes.js"
 
 // use routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/projects/:projectId/tasks", taskRoutes);
+app.use("/api/v1/projects", projectSummaryRoutes);
 
 export { app };
