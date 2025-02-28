@@ -2,7 +2,14 @@ import express, { Application } from "express";
 import cors from "cors";
 import cookiparser from "cookie-parser";
 
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./swagger-output.json" with { type: "json" };
+
+// create express app
 const app: Application = express();
+
+// use swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(
   cors({
@@ -18,9 +25,9 @@ app.use(cookiparser());
 
 // import routes
 import userRoutes from "./routes/user.routes.js";
-import projectRoutes from "./routes/project.routes.js"
-import taskRoutes from "./routes/task.routes.js"
-import projectSummaryRoutes from "./routes/projectSummary.routes.js"
+import projectRoutes from "./routes/project.routes.js";
+import taskRoutes from "./routes/task.routes.js";
+import projectSummaryRoutes from "./routes/projectSummary.routes.js";
 
 // use routes
 app.use("/api/v1/users", userRoutes);
