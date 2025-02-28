@@ -131,8 +131,29 @@ const getAllProjectsSummary = asyncHandler(
             taskName: task.name,
             taskDescription: task.description,
             taskAssignedTo: task.assignedTo?.fullName || "Unassigned",
-            taskStartTime: new Date(task.startTime).toISOString().split("T")[0],
-            taskEndTime: new Date(task.endTime).toISOString().split("T")[0],
+            taskStartTime: new Date(task.startTime)
+              .toLocaleString("en-IN", {
+                weekday: "short", // Optional: Adds the day of the week
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true, // Use 12-hour time format
+              })
+              .replace(",", ""), // Removing the comma between date and time
+
+            taskEndTime: new Date(task.endTime)
+              .toLocaleString("en-IN", {
+                weekday: "short", // Optional: Adds the day of the week
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true, // Use 12-hour time format
+              })
+              .replace(",", ""), // Removing the comma between date and time
             taskDuration: taskDuration.toFixed(2),
           });
         }
@@ -278,8 +299,29 @@ const getProjectSummary = asyncHandler(
           taskName: task.name,
           taskDescription: task.description,
           taskAssignedTo: task.assignedTo?.fullName || "Unassigned",
-          taskStartTime: new Date(task.startTime).toISOString().split("T")[0],
-          taskEndTime: new Date(task.endTime).toISOString().split("T")[0],
+          taskStartTime: new Date(task.startTime)
+            .toLocaleString("en-IN", {
+              weekday: "short", // Optional: Adds the day of the week
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true, // Use 12-hour time format
+            })
+            .replace(",", ""), // Removing the comma between date and time
+
+          taskEndTime: new Date(task.endTime)
+            .toLocaleString("en-IN", {
+              weekday: "short", // Optional: Adds the day of the week
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true, // Use 12-hour time format
+            })
+            .replace(",", ""), // Removing the comma between date and time
           taskDuration: taskDuration.toFixed(2),
         });
       }
