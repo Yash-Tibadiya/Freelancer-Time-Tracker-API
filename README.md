@@ -55,25 +55,44 @@ To run the API locally, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/freelancer-time-tracker-api.git
-   cd freelancer-time-tracker-api
+   git clone https://github.com/yourusername/Freelancer-Time-Tracker-API.git
+   cd Freelancer-Time-Tracker-API
    ```
 
-2. Install dependencies:
+2. **Install Dependencies**
 
-   For Python-based environments (assuming this is a Python backend):
+   Run the following command to install all necessary dependencies.
 
    ```bash
-   pip install -r requirements.txt
+   npm install
    ```
 
-3. Start the server:
+3. **Create `.env` File**
+
+   Create a `.env` file in the root directory and add the following variables:
+
+    ```env
+    PORT=8000
+    MONGO_URI=
+
+    CORS_ORIGIN=*
+
+    ACCESS_TOKEN_SECRET=
+    ACCESS_TOKEN_EXPIRY=1d
+
+    REFRESH_TOKEN_SECRET=
+    REFRESH_TOKEN_EXPIRY=7d
+    ```
+
+4. **Run the Application**
+
+   To start the server in development mode, use the following command:
 
    ```bash
-   python manage.py runserver
+   npm run start
    ```
 
-   The API should now be available at `http://localhost:8000`.
+   This will start the server on `http://localhost:8000`.
 
 ## Usage
 
